@@ -6,8 +6,8 @@ import numpy as np
 import torch
 
 
-N_IMAGES = 202599
-IMG_SIZE = 256
+N_IMAGES = 202599       #图片数量
+IMG_SIZE = 256           #图片尺寸
 IMG_PATH = 'images_%i_%i.pth' % (IMG_SIZE, IMG_SIZE)
 ATTR_PATH = 'attributes.pth'
 
@@ -21,17 +21,17 @@ def preprocess_images():
     print("Reading images from img_align_celeba/ ...")
     raw_images = []
     for i in range(1, N_IMAGES + 1):
-        if i % 10000 == 0:
-            print(i)
-        raw_images.append(mpimg.imread('img_align_celeba/%06i.jpg' % i)[20:-20])
+        if i % 10000 == 0:     #10000张排列
+            print(i)   
+        raw_images.append(mpimg.imread('img_align_celeba/%06i.jpg' % i)[20:-20])    #根据图片名来划分的，并切片大小？？
 
-    if len(raw_images) != N_IMAGES:
+    if len(raw_images) != N_IMAGES:     #如果图片数量不对的话
         raise Exception("Found %i images. Expected %i" % (len(raw_images), N_IMAGES))
 
     print("Resizing images ...")
     all_images = []
     for i, image in enumerate(raw_images):
-        if i % 10000 == 0:
+        if i % 10000 == 0:        #10000张排列
             print(i)
         assert image.shape == (178, 178, 3)
         if IMG_SIZE < 178:
@@ -46,7 +46,7 @@ def preprocess_images():
     assert data.size() == (N_IMAGES, 3, IMG_SIZE, IMG_SIZE)
 
     print("Saving images to %s ..." % IMG_PATH)
-    torch.save(data[:20000].clone(), 'images_%i_%i_20000.pth' % (IMG_SIZE, IMG_SIZE))
+    torch.save(data[:20000].clone(), 'images_%i_%i_20000.pth' % (IMG_SIZE, IMG_SIZE))   
     torch.save(data, IMG_PATH)
 
 
